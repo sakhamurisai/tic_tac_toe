@@ -79,6 +79,7 @@ class TicTacToe:
         else:
             print("The position is already been taken by the other player")
             x_play()
+            self.add_x(xp_row, xp_col)
 
     def add_o(self, op_row, op_col):
         if self.game[op_row, op_col] == "-":
@@ -86,33 +87,39 @@ class TicTacToe:
         else:
             print("The position already been taken by the other player try another position")
             o_play()
+            self.add_o(op_row, op_col)
 
     def display(self):
         print(self.game)
 
     def check_rows_and_columns(self, xp, op):
-        print("the code is entering in the loop")
         for number in range(3):
-            print(np.all(self.game[number, :]))
-            if np.all(self.game[number, :]) == "X" or np.all(self.game[:, number]) == "X":
+            # Check rows
+            if np.all(self.game[number, :] == "X"):
                 print(f"...................{xp} won the game..................")
                 return False
-
-            elif np.all(self.game[:, number]) == "O" or np.all(self.game[:, number]) == "O":
+            elif np.all(self.game[number, :] == "O"):
                 print(f"...................{op} won the game..................")
                 return False
 
-        self.diagonal(xp, op)
+            # Check columns
+            if np.all(self.game[:, number] == "X"):
+                print(f"...................{xp} won the game..................")
+                return False
+            elif np.all(self.game[:, number] == "O"):
+                print(f"...................{op} won the game..................")
+                return False
+
+        return self.diagonal(xp, op)
 
     def diagonal(self, xp, op):
-        for i in range(3):
-            if np.all(np.diag(self.game) == "X") or np.all(np.diag(np.fliplr(self.game)) == "X"):
-                print(f"...................{xp} won the game..................")
-                return False
-            if np.all(np.diag(self.game) == "O") or np.all(np.diag(np.fliplr(self.game)) == "O"):
-                print(f"...................{op} won the game..................")
-                return False
-
+        if np.all(np.diag(self.game) == "X") or np.all(np.diag(np.fliplr(self.game)) == "X"):
+            print(f"...................{xp} won the game..................")
+            return False
+        elif np.all(np.diag(self.game) == "O") or np.all(np.diag(np.fliplr(self.game)) == "O"):
+            print(f"...................{op} won the game..................")
+            return False
+        return True
 
 game = TicTacToe(game_play)
 while game:
